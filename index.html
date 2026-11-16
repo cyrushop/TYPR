@@ -1085,6 +1085,21 @@ addEventListener('pointerup', (e) => { if (walk.look && e.pointerId === walk.loo
 
 /* ------------------------------ 截圖 ------------------------------ */
 const shotURLs = [];
+// 下載：在 claude.ai Artifact 內經 downloads 功能（會先請你確認）；其他情況用一般下載連結
+let dlNS;
+async function downloadsNS() {
+  if (dlNS !== undefined) return dlNS;
+  try { dlNS = window.claude && window.claude.use ? await window.claude.use('downloads') : null; } catch { dlNS = null; }
+  return dlNS;
+}
+async function saveFile(blob, filename, href) {
+  const ns = await downloadsNS();
+  if (ns) {
+    try { await ns.save({ filename, data: blob }); return true; }
+    catch (e) { if (e && e.code === 'rate_limited') { $('#shots-msg').textContent = '已有一個下載確認視窗未處理，請先完成。'; } return false; }
+  }
+  const a = document.createElement('a'); a.href = href; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); return true;
+}
 function capture(list) {
   const [W, H] = $('#sel-res').value.split('x').map(Number), clean = $('#chk-clean').checked;
   const prev = { pr: renderer.getPixelRatio(), size: renderer.getSize(new THREE.Vector2()), pos: camera.position.clone(), q: camera.quaternion.clone(), tgt: controls.target.clone(), fov: camera.fov, aspect: camera.aspect };
@@ -1107,10 +1122,11 @@ function capture(list) {
 async function showShots(shots) {
   shotURLs.splice(0).forEach((u) => URL.revokeObjectURL(u));
   const date = new Date().toISOString().slice(0, 10), plan = state.plan === 'A' ? '梳化靠窗' : '梳化離窗';
-  const items = await Promise.all(shots.map(async (s) => { const blob = await (await fetch(s.url)).blob(); const u = URL.createObjectURL(blob); shotURLs.push(u); return { ...s, href: u, file: `客廳_${s.name}_${plan}_${date}.png` }; }));
-  $('#shots').innerHTML = items.map((s) => `<figure><img src="${s.href}" alt="${esc(s.name)}"><figcaption><span>${esc(s.name)}</span><a href="${s.href}" download="${esc(s.file)}">下載 PNG</a></figcaption></figure>`).join('');
+  const items = await Promise.all(shots.map(async (s) => { const blob = await (await fetch(s.url)).blob(); const u = URL.createObjectURL(blob); shotURLs.push(u); return { ...s, blob, href: u, file: `客廳_${s.name}_${plan}_${date}.png` }; }));
+  $('#shots').innerHTML = items.map((s, i) => `<figure><img src="${s.href}" alt="${esc(s.name)}"><figcaption><span>${esc(s.name)}</span><button data-i="${i}" style="min-height:0;padding:3px 9px">下載 PNG</button></figcaption></figure>`).join('');
+  $('#shots').querySelectorAll('button[data-i]').forEach((btn) => btn.onclick = () => { const s = items[+btn.dataset.i]; saveFile(s.blob, s.file, s.href); });
   $('#shots-msg').textContent = `解像度 ${shots[0].W}×${shots[0].H}；${$('#chk-clean').checked ? '已隱藏尺寸及未確認標示' : '包括目前開啟的標示'}。手機可長按圖片儲存。`;
-  $('#shots-all').onclick = async () => { for (const s of items) { const a = document.createElement('a'); a.href = s.href; a.download = s.file; document.body.appendChild(a); a.click(); a.remove(); await new Promise((r) => setTimeout(r, 350)); } };
+  $('#shots-all').onclick = async () => { for (const s of items) { const ok = await saveFile(s.blob, s.file, s.href); if (!ok && dlNS) break; await new Promise((r) => setTimeout(r, 350)); } };
   $('#shots-dlg').classList.add('show');
 }
 
