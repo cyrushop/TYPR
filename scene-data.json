@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "title": "客廳連飯廳 3D 布局（第三版）",
+    "updated": "2026-11-16",
+    "units": "metres",
+    "coordinate_system": {
+      "x": "闊度 0–3.50；x=0 為平面圖左方的牆（站在飯廳望向窗時的左手邊，即長櫃及酒櫃所靠的牆）",
+      "y": "長度 0–9.10；y=0 為窗牆，往飯廳方向遞增",
+      "z": "高度，地面為 0",
+      "threejs_mapping": "three.js 中 x→x、z（高度）→y、y（長度）→z"
+    },
+    "position_rule": "每件物件以 x_min、y_min、z_min（最靠近 x=0、窗牆及地面的一角）加上 w（X 方向）、d（Y 方向）、h（高度）表示"
+  },
+  "room": {
+    "width_x": 3.5,
+    "length_y": 9.1,
+    "ceiling_height_assumed": 2.6,
+    "ceiling_height_confirmed": false,
+    "walls": "深灰色牆板，帶淡白色雲石紋，板與板之間有細縫",
+    "floor": "淺灰色雲石紋大階磚，高光",
+    "ceiling": "白色及淺灰色，近窗位置有深灰色假天花／橫樑，飯廳有外露路軌",
+    "openings": [
+      { "name": "主窗", "wall": "y=0", "note": "整幅窗牆，掛藍灰色厚身窗簾" },
+      { "name": "窗角矮台", "wall": "y=0 與 x=0 轉角", "note": "尺寸未知，須量度" },
+      { "name": "捲簾窗", "wall": "x=3.5", "note": "位於飯廳附近，確實位置未知" },
+      { "name": "廚房開口", "wall": "x=0", "note": "位於長櫃遠離窗的一端（y 約 7.7 以後），按相片推斷" },
+      { "name": "室內玻璃窗及門", "wall": "未知", "note": "見相片 06，位置未知" }
+    ]
+  },
+  "objects": [
+    { "id": "curtain", "name": "窗簾", "x": 0, "y": 0, "z": 0, "w": 3.5, "d": 0.15, "h": 2.45, "color": "#6C7A85", "material": "藍灰色厚身絨布簾", "confirmed": true },
+    { "id": "aircon", "name": "落地冷氣機（須遷移）", "x": 0.03, "y": 0.15, "z": 0, "w": 0.35, "d": 0.35, "h": 1.80, "color": "#F3F3F3", "material": "白色圓柱形，正面有金色條", "confirmed": false, "note": "現時位於窗前中間，新布局須移至窗角" },
+    { "id": "purifier", "name": "空氣淨化器", "x": 3.15, "y": 0.15, "z": 0, "w": 0.30, "d": 0.30, "h": 0.70, "color": "#F6F6F6", "material": "白色方形", "confirmed": false },
+    { "id": "sofa", "name": "梳化", "x": 0.415, "y": 0.15, "z": 0, "w": 2.67, "d": 1.00, "h": 1.00, "color": "#BDB6AC", "material": "淺灰色皮革三座位電動梳化，闊扶手", "confirmed": true },
+    { "id": "listening_position", "name": "聆聽位（耳朵）", "x": 1.75, "y": 0.50, "z": 1.05, "type": "point", "confirmed": false, "note": "假設坐下時頭部離梳化背約 0.35 m" },
+    { "id": "projector", "name": "投影機（吊頂）", "x": 1.575, "y": 1.25, "z": 2.33, "w": 0.35, "d": 0.30, "h": 0.12, "color": "#F0F0F0", "confirmed": false },
+    { "id": "tea_table", "name": "茶几", "x": 1.025, "y": 1.55, "z": 0, "w": 1.45, "d": 0.45, "h": 0.45, "color": "#1E1E1E", "material": "黑色金屬架配玻璃面", "confirmed": true, "note": "高度為假設" },
+    { "id": "speaker_left", "name": "JBL K2 S9800（左）", "x": 0.542, "y": 2.50, "z": 0, "w": 0.508, "d": 0.375, "h": 1.295, "color": "#1C1C1C", "material": "黑色箱體，正面上方為號角，下方為 15 吋低音單元；前板面向窗", "confirmed": true },
+    { "id": "speaker_right", "name": "JBL K2 S9800（右）", "x": 2.450, "y": 2.50, "z": 0, "w": 0.508, "d": 0.375, "h": 1.295, "color": "#1C1C1C", "material": "同左喇叭", "confirmed": true },
+    { "id": "rack_1", "name": "器材架 1", "x": 1.15, "y": 2.50, "z": 0, "w": 0.60, "d": 0.50, "h": 0.88, "color": "#2B2B2B", "material": "黑色層板配不鏽鋼柱及釘腳，三層", "contents": "上：Esoteric 銀色器材；中：Esoteric 銀色器材；下：Audio Research Ref 150 膽後級（銀色面板，黑色把手）", "confirmed": true },
+    { "id": "rack_2", "name": "器材架 2", "x": 1.75, "y": 2.50, "z": 0, "w": 0.60, "d": 0.50, "h": 0.88, "color": "#2B2B2B", "material": "同器材架 1", "contents": "上：黑色器材；中：Esoteric 銀色器材；下：Audio Space 膽前級（外露真空管）", "confirmed": true },
+    { "id": "screen", "name": "電動投影幕（暫定 100 吋 16:9）", "x": 0.645, "y": 3.15, "z": 1.30, "w": 2.21, "d": 0.01, "h": 1.245, "color": "#FAFAFA", "confirmed": false, "note": "幕盒約 2.4 m 闊，吊於天花；尺寸視乎樓底" },
+    { "id": "aquarium_cabinet", "name": "魚缸櫃", "x": 1.145, "y": 3.30, "z": 0, "w": 1.21, "d": 0.47, "h": 0.75, "color": "#5F6670", "material": "灰色高光三門櫃", "confirmed": false, "note": "魚缸連櫃總高 1.31 m；櫃與缸的分界為按相片估算" },
+    { "id": "aquarium_tank", "name": "魚缸", "x": 1.145, "y": 3.30, "z": 0.75, "w": 1.21, "d": 0.47, "h": 0.56, "color": "#7CC3B4", "material": "超白無框玻璃，水草造景，頂部 LED 燈架；正面向飯廳", "confirmed": false },
+    { "id": "wine_cabinet", "name": "酒櫃", "x": 0, "y": 5.60, "z": 0, "w": 0.46, "d": 0.48, "h": 1.28, "color": "#141414", "material": "黑色，玻璃門", "confirmed": true, "note": "尺寸由用戶提供（48×46×128 cm）；位置為建議" },
+    { "id": "long_cabinet", "name": "長櫃（深色木摺枱）", "x": 0, "y": 6.10, "z": 0, "w": 0.63, "d": 1.58, "h": 0.94, "color": "#3E2C22", "material": "深啡色實木摺枱，連抽屜及高腳凳", "confirmed": true },
+    { "id": "dining_table", "name": "餐枱", "x": 1.89, "y": 6.00, "z": 0, "w": 0.91, "d": 1.82, "h": 0.75, "color": "#4A4A50", "material": "深灰色雲石紋枱布，黑色 X 形枱腳", "confirmed": true, "note": "高度為假設" },
+    { "id": "chair_l1", "name": "餐椅", "x": 1.39, "y": 6.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "material": "黑色皮座，胡桃木弧形椅背，黑色金屬腳", "confirmed": false },
+    { "id": "chair_l2", "name": "餐椅", "x": 1.39, "y": 7.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false },
+    { "id": "chair_r1", "name": "餐椅", "x": 2.85, "y": 6.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false },
+    { "id": "chair_r2", "name": "餐椅", "x": 2.85, "y": 7.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false }
+  ],
+  "lights": [
+    { "name": "方形 LED 吊燈（兩個上下疊）", "x": 1.75, "y": 1.8, "z": 2.2, "size": 0.9, "note": "位置按相片估算" }
+  ],
+  "cameras": [
+    { "name": "立體鳥瞰", "position": [7.2, 5.2, 7.5], "target": [1.75, 0.6, 4.2], "space": "threejs" },
+    { "name": "坐喺梳化望", "position": [1.75, 1.1, 0.55], "target": [1.75, 1.0, 3.5], "space": "threejs" },
+    { "name": "由飯廳望", "position": [1.75, 1.65, 8.8], "target": [1.75, 0.9, 3.0], "space": "threejs" },
+    { "name": "俯視", "position": [1.75, 14, 4.62], "target": [1.75, 0, 4.55], "space": "threejs" }
+  ]
+}

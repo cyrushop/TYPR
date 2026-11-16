@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客廳音響布局 3D 原型（第三版）</title>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#e6e4de}
+  #v{width:100vw;height:calc(100vh - 56px)}
+  .bar{height:56px;display:flex;gap:8px;align-items:center;padding:0 12px;background:#fff;border-top:1px solid #ddd}
+  button{padding:6px 12px;border:1px solid #bbb;border-radius:8px;background:#fafafa;cursor:pointer;font-size:14px}
+</style>
+</head>
+<body>
+<div id="v"></div>
+<div class="bar">
+  <button onclick="view('iso')">立體鳥瞰</button>
+  <button onclick="view('sofa')">坐喺梳化望</button>
+  <button onclick="view('dining')">由飯廳望</button>
+  <button onclick="view('top')">俯視</button>
+  <button id="sb" onclick="toggleScreen()">落幕</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+// 座標：x = 闊度（0 為長櫃及酒櫃所靠的牆），z = 由窗牆起計的長度，y = 高度。單位：米。
+const el = document.getElementById('v');
+const r = new THREE.WebGLRenderer({ antialias: true });
+r.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+el.appendChild(r.domElement);
+const s = new THREE.Scene();
+s.background = new THREE.Color(0xe6e4de);
+const cam = new THREE.PerspectiveCamera(45, 1, 0.05, 100);
+const ctl = new THREE.OrbitControls(cam, r.domElement);
+ctl.enableDamping = true;
+s.add(new THREE.HemisphereLight(0xffffff, 0x777777, 0.85));
+const dl = new THREE.DirectionalLight(0xffffff, 0.55);
+dl.position.set(6, 9, -3);
+s.add(dl);
+
+function box(w, h, d, x, y, z, c, o) {
+  const m = new THREE.MeshLambertMaterial({ color: c, transparent: o !== undefined, opacity: o === undefined ? 1 : o });
+  const g = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+  g.position.set(x + w / 2, y + h / 2, z + d / 2);
+  s.add(g);
+  return g;
+}
+function cyl(rad, x, y, z, c) {
+  const g = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, 0.02, 32), new THREE.MeshLambertMaterial({ color: c }));
+  g.rotation.x = Math.PI / 2;
+  g.position.set(x, y, z);
+  s.add(g);
+}
+
+// 房間
+box(3.5, 0.02, 9.1, 0, -0.02, 0, 0xd2cec7);              // 地台
+box(0.06, 2.6, 9.1, -0.06, 0, 0, 0x4b4d50);              // x=0 牆
+box(3.5, 2.6, 0.06, 0, 0, 9.1, 0x4b4d50);                // 飯廳盡頭牆
+box(3.5, 0.7, 0.06, 0, 0, -0.06, 0x4b4d50);              // 窗牆下段
+box(3.5, 0.3, 0.06, 0, 2.3, -0.06, 0x4b4d50);            // 窗牆上段
+box(2.5, 1.6, 0.02, 0.5, 0.7, -0.04, 0x9cc3dd, 0.6);     // 窗玻璃
+box(0.55, 2.45, 0.1, 0.02, 0.1, 0.02, 0x6c7a85);         // 窗簾左
+box(0.55, 2.45, 0.1, 2.93, 0.1, 0.02, 0x6c7a85);         // 窗簾右
+box(0.06, 0.12, 9.1, 3.5, 0, 0, 0x4b4d50);               // x=3.5 牆（剖切，只顯示牆腳）
+
+// 梳化區
+box(2.67, 0.45, 1.0, 0.415, 0, 0.15, 0xbdb6ac);
+box(2.67, 0.55, 0.25, 0.415, 0.45, 0.15, 0xb3aca2);
+box(0.2, 0.22, 0.75, 0.415, 0.45, 0.4, 0xb3aca2);
+box(0.2, 0.22, 0.75, 2.885, 0.45, 0.4, 0xb3aca2);
+box(0.35, 1.8, 0.35, 0.03, 0, 0.15, 0xf3f3f3);           // 冷氣機（須遷移）
+box(0.3, 0.7, 0.3, 3.15, 0, 0.15, 0xf6f6f6);             // 淨化器
+box(1.45, 0.04, 0.45, 1.025, 0.41, 1.55, 0x1e1e1e);      // 茶几面
+box(1.37, 0.41, 0.37, 1.065, 0, 1.59, 0x333333, 0.5);    // 茶几架
+
+// 吊燈（兩個方形 LED 框，位置為估算）
+[[0.9, 2.25], [0.7, 2.05]].forEach(([sz, y]) => {
+  const t = 0.04;
+  box(sz, t, t, 1.75 - sz / 2, y, 1.8 - sz / 2, 0xffffff);
+  box(sz, t, t, 1.75 - sz / 2, y, 1.8 + sz / 2 - t, 0xffffff);
+  box(t, t, sz, 1.75 - sz / 2, y, 1.8 - sz / 2, 0xffffff);
+  box(t, t, sz, 1.75 + sz / 2 - t, y, 1.8 - sz / 2, 0xffffff);
+});
+
+// 喇叭（前板 z=2.50，面向窗）
+[0.542, 2.45].forEach(x => {
+  box(0.508, 1.295, 0.375, x, 0, 2.5, 0x1c1c1c);
+  box(0.42, 0.22, 0.02, x + 0.044, 0.98, 2.48, 0x8a8a8a);
+  box(0.2, 0.08, 0.02, x + 0.154, 0.86, 2.48, 0xa0a0a0);
+  cyl(0.19, x + 0.254, 0.38, 2.49, 0x3a3a3a);
+});
+
+// 器材架（前沿與喇叭齊平）
+[1.15, 1.75].forEach(x => {
+  box(0.6, 0.88, 0.5, x, 0, 2.5, 0x2b2b2b, 0.25);
+  [0.04, 0.32, 0.6].forEach(y => box(0.44, 0.15, 0.4, x + 0.08, y, 2.55, 0xdadada));
+});
+box(0.07, 0.07, 0.07, 1.42, 0.75, 2.65, 0xffb347);       // 膽管示意
+box(0.07, 0.07, 0.07, 1.54, 0.75, 2.65, 0xffb347);
+
+// 投影
+box(2.4, 0.12, 0.12, 0.55, 2.45, 3.1, 0xdedede);         // 幕盒
+const scr = box(2.21, 1.245, 0.01, 0.645, 1.3, 3.16, 0xfafafa);
+scr.visible = false;
+box(0.35, 0.12, 0.3, 1.575, 2.33, 1.25, 0xf0f0f0);       // 投影機
+box(0.03, 0.15, 0.03, 1.735, 2.45, 1.385, 0x888888);
+
+// 魚缸
+box(1.21, 0.75, 0.47, 1.145, 0, 3.3, 0x5f6670);
+box(1.21, 0.56, 0.47, 1.145, 0.75, 3.3, 0x7cc3b4, 0.4);
+box(0.12, 0.3, 0.1, 1.35, 0.76, 3.5, 0x4f8f3a);
+box(0.1, 0.4, 0.1, 1.9, 0.76, 3.45, 0x5c9e44);
+box(0.15, 0.22, 0.1, 2.15, 0.76, 3.55, 0x4f8f3a);
+
+// 飯廳
+box(0.46, 1.28, 0.48, 0, 0, 5.6, 0x141414);              // 酒櫃
+box(0.02, 1.1, 0.4, 0.46, 0.1, 5.64, 0x3a3a46, 0.7);     // 酒櫃玻璃門
+box(0.63, 0.94, 1.58, 0, 0, 6.1, 0x3e2c22);              // 長櫃
+box(0.91, 0.04, 1.82, 1.89, 0.72, 6.0, 0x4a4a50);        // 餐枱
+box(0.4, 0.72, 0.9, 2.145, 0, 6.46, 0x222222);
+[6.2, 7.2].forEach(z => {
+  box(0.45, 0.45, 0.45, 1.39, 0, z, 0x2a2a2a);
+  box(0.06, 0.42, 0.45, 1.39, 0.45, z, 0x6b4a2f);
+  box(0.45, 0.45, 0.45, 2.85, 0, z, 0x2a2a2a);
+  box(0.06, 0.42, 0.45, 3.24, 0.45, z, 0x6b4a2f);
+});
+
+const views = {
+  iso:    [[7.2, 5.2, 7.5], [1.75, 0.6, 4.2]],
+  sofa:   [[1.75, 1.1, 0.55], [1.75, 1.0, 3.5]],
+  dining: [[1.75, 1.65, 8.8], [1.75, 0.9, 3.0]],
+  top:    [[1.75, 14, 4.62], [1.75, 0, 4.55]]
+};
+function view(k) { const v = views[k]; cam.position.set(...v[0]); ctl.target.set(...v[1]); ctl.update(); }
+function toggleScreen() { scr.visible = !scr.visible; document.getElementById('sb').textContent = scr.visible ? '收幕' : '落幕'; }
+function resize() { const w = el.clientWidth, h = el.clientHeight; r.setSize(w, h); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+window.addEventListener('resize', resize);
+resize();
+view('iso');
+(function loop() { ctl.update(); r.render(s, cam); requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>
