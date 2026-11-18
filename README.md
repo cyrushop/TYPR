@@ -1,16 +1,23 @@
 # 客廳音響布局 3D 模型
 
-3.5 m × 9.1 m 客廳連飯廳的瀏覽器 3D 模型。所有尺寸及位置由 `scene-data.json` 讀入（項目要求見 `CLAUDE.md`，布局說明見 `布局規劃.md`）。
+3.5 m × 9.1 m 客廳連飯廳的瀏覽器 3D 模型。共有兩個方案，各自一頁、各自一個 JSON：
+
+| 方案 | 網頁 | 資料 | 離線版 |
+|---|---|---|---|
+| 縱向（第三版，喇叭在廳中間向窗發聲；保留作比較） | `index.html` | `scene-data.json` | `dist/living-room-3d-offline.html` |
+| 橫向（維持現有聆聽方向，JBL K2 S9500 放器材架左右，魚缸及長櫃向飯廳移） | `layout-b.html` | `scene-data-b.json` | `dist/living-room-3d-layout-b-offline.html` |
+
+項目要求見 `CLAUDE.md`，縱向方案的布局說明見 `布局規劃.md`。橫向方案的待量度清單在 `scene-data-b.json` 的 `meta.to_measure`，網頁「待確認」分頁亦會列出。
 
 ## 開啟方法
 
 | 用途 | 做法 |
 |---|---|
-| 直接分享／沒有網絡 | 開啟 `dist/living-room-3d-offline.html`（three.js 及 JSON 已內嵌，可離線使用） |
-| 修改 JSON 後即時更新 | 在此資料夾執行 `python3 -m http.server 8000`，開啟 http://localhost:8000 ，改完 JSON 重新整理即可 |
+| 直接分享／沒有網絡 | 開啟 `dist/` 內的離線版（three.js 及 JSON 已內嵌，可離線使用） |
+| 修改 JSON 後即時更新 | 在此資料夾執行 `python3 -m http.server 8000`，開啟 http://localhost:8000 （橫向方案：http://localhost:8000/layout-b.html ），改完 JSON 重新整理即可 |
 | 直接雙擊 `index.html` | 需要網絡（three.js 由 CDN 載入）；瀏覽器會封鎖讀取本地 JSON，頁面會請你選擇 `scene-data.json` |
 
-修改 `scene-data.json` 後，如要更新離線版：
+修改任何一個 JSON 後，如要更新離線版（兩頁同時輸出）：
 
 ```bash
 npm install

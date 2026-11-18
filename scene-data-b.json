@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "title": "客廳連飯廳 3D 布局（橫向方案：維持現有聆聽方向，S9500 放器材架左右）",
+    "updated": "2026-11-18",
+    "units": "metres",
+    "coordinate_system": {
+      "x": "闊度 0–3.50；x=0 為投影幕、器材架、魚缸及長櫃所靠的牆（站在飯廳望向窗時的左手邊）",
+      "y": "長度 0–9.10；y=0 為窗牆，往飯廳方向遞增",
+      "z": "高度，地面為 0",
+      "threejs_mapping": "three.js 中 x→x、z（高度）→y、y（長度）→z"
+    },
+    "position_rule": "每件物件以 x、y、z（最靠近 x=0、窗牆及地面的一角）加上 w（X 方向）、d（Y 方向）、h（高度）表示；facing 為正面朝向（+x、-x、+y、-y）",
+    "design_rule": "聆聽中軸 y = 2.89（器材架中線）；梳化、茶几、投影幕及兩隻喇叭均以此對稱。右喇叭（由梳化望為右手邊，近窗）須避開房門；此值為設計建議，須按實測修正。",
+    "plans": {
+      "A": { "label": "梳化貼牆（現況）" },
+      "B": { "label": "梳化及茶几前移 0.30 m", "move": { "ids": ["sofa", "listening_position", "tea_table"], "dx": -0.30, "dy": 0 } }
+    },
+    "gaps": [
+      ["房門 → 右喇叭", "y", "door_room", "speaker_right"],
+      ["右喇叭 → 器材架", "y", "speaker_right", "rack_1"],
+      ["器材架 → 左喇叭", "y", "rack_2", "speaker_left"],
+      ["左喇叭 → 魚缸", "y", "speaker_left", "aquarium_cabinet"],
+      ["魚缸 → 長櫃", "y", "aquarium_cabinet", "long_cabinet"],
+      ["牆 → 喇叭背（後方倒相孔）", "x", "WALL0", "speaker_left"],
+      ["喇叭前板 → 茶几", "x", "speaker_left", "tea_table"],
+      ["茶几 → 梳化", "x", "tea_table", "sofa"],
+      ["梳化 → 酒櫃", "y", "sofa", "wine_cabinet"],
+      ["長櫃 → 左側餐椅", "x", "long_cabinet", "chair_l1"],
+      ["右側餐椅 → 右牆", "x", "chair_r1", "WALL1"]
+    ],
+    "to_measure": [
+      "近窗房門：門框兩邊離窗牆的距離、門闊，以及門向哪一邊打開（決定右喇叭可放多近窗）",
+      "現有梳化兩端離窗牆的距離（確認聆聽中軸是否在 y ≈ 2.89）",
+      "現有投影幕：畫面闊、畫面高、畫面底離地、幕盒底離地（模型暫按相片估算約 76 吋）",
+      "天花橫樑：離窗牆距離、闊度、樑底離地",
+      "魚缸上方室內玻璃窗：兩邊位置及上下高度",
+      "廚房門口位置（確認長櫃移位後不會擋門）",
+      "S9500 實物：底座闊、深及總高（模型暫按 59 × 50 × 137 cm）",
+      "投影機現時吊裝位置",
+      "酒櫃及捲簾窗在右牆的位置"
+    ]
+  },
+  "room": {
+    "width_x": 3.5,
+    "length_y": 9.1,
+    "ceiling_height_assumed": 2.6,
+    "ceiling_height_confirmed": false,
+    "walls": "深灰色牆板，帶淡白色雲石紋，板與板之間有細縫",
+    "floor": "淺灰色雲石紋大階磚，高光",
+    "ceiling": "白色及淺灰色，中央有結構橫樑，飯廳有外露路軌",
+    "openings": [
+      { "name": "主窗", "wall": "y=0", "note": "整幅窗牆，掛藍灰色厚身窗簾" },
+      { "name": "窗角矮台", "wall": "y=0 與 x=0 轉角", "note": "尺寸未知，須量度" },
+      { "name": "捲簾窗", "wall": "x=3.5", "note": "位於酒櫃附近，確實位置未知" }
+    ]
+  },
+  "objects": [
+    { "id": "curtain", "name": "窗簾", "x": 0, "y": 0, "z": 0, "w": 3.5, "d": 0.15, "h": 2.45, "color": "#6C7A85", "material": "藍灰色厚身絨布簾", "confirmed": true },
+    { "id": "aircon", "name": "落地冷氣機（維持窗前）", "x": 1.80, "y": 0.15, "z": 0, "w": 0.35, "d": 0.35, "h": 1.80, "color": "#F3F3F3", "material": "白色圓柱形，正面有金色條", "confirmed": false, "note": "按相片估算，位於窗前中間" },
+    { "id": "purifier", "name": "空氣淨化器", "x": 2.25, "y": 0.15, "z": 0, "w": 0.30, "d": 0.30, "h": 0.70, "color": "#F6F6F6", "material": "白色方形", "confirmed": false },
+
+    { "id": "door_room", "name": "近窗房門（佔位）", "kind": "opening", "x": 0, "y": 0.55, "z": 0, "w": 0.04, "d": 0.90, "h": 2.05, "color": "#1B1C1E", "confirmed": false, "note": "按相片推斷位於投影幕右方、近窗；位置、門闊及開門方向均須量度" },
+    { "id": "glass_window", "name": "室內玻璃窗（佔位）", "kind": "opening", "x": 0, "y": 3.40, "z": 1.45, "w": 0.04, "d": 1.15, "h": 0.75, "color": "#20222A", "confirmed": false, "note": "按相片推斷位於現時魚缸上方；魚缸移走後，左喇叭會在其下方" },
+    { "id": "door_kitchen", "name": "廚房門口（佔位）", "kind": "opening", "x": 0, "y": 7.70, "z": 0, "w": 0.04, "d": 0.90, "h": 2.05, "color": "#1B1C1E", "confirmed": false, "note": "按相片推斷位於長櫃遠離窗一端；闊度為佔位" },
+    { "id": "ceiling_beam", "name": "天花橫樑（佔位）", "kind": "structure", "x": 0, "y": 2.43, "z": 2.40, "w": 3.5, "d": 0.38, "h": 0.20, "color": "#E4E3DF", "confirmed": false, "note": "按相片推斷橫跨全廳；位置、闊度及樑底高度均須量度" },
+
+    { "id": "sofa", "name": "梳化", "facing": "-x", "x": 2.50, "y": 1.555, "z": 0, "w": 1.00, "d": 2.67, "h": 1.00, "color": "#BDB6AC", "material": "淺灰色皮革三座位電動梳化，闊扶手；靠右牆", "confirmed": false, "note": "尺寸已確認；位置按聆聽中軸置中，須與現況核對" },
+    { "id": "listening_position", "name": "聆聽位（耳朵）", "type": "point", "x": 3.15, "y": 2.89, "z": 1.05, "confirmed": false, "note": "假設坐下時頭部離梳化背約 0.35 m" },
+    { "id": "tea_table", "name": "茶几", "x": 1.65, "y": 2.165, "z": 0, "w": 0.45, "d": 1.45, "h": 0.45, "color": "#1E1E1E", "material": "黑色金屬架配玻璃面", "confirmed": false, "note": "尺寸已確認（高度為假設）；位置為建議" },
+    { "id": "projector", "name": "投影機（吊頂，佔位）", "facing": "-x", "x": 2.80, "y": 2.715, "z": 2.20, "w": 0.30, "d": 0.35, "h": 0.12, "color": "#F0F0F0", "confirmed": false, "note": "現有投影機位置未知，暫按梳化上方吊頂" },
+
+    { "id": "speaker_right", "name": "JBL K2 S9500（右，近窗）", "model": "S9500", "facing": "+x", "x": 0.30, "y": 1.55, "z": 0, "w": 0.50, "d": 0.59, "h": 1.37, "color": "#111111", "material": "黑色鋼琴漆箱體，上下各一隻 14 吋 1400Nd 低音，中間為 475Nd 壓縮驅動器配雙曲率號角，灰色底座；背面上下各一個倒相孔", "confirmed": false, "note": "尺寸取自 audio-database（59 × 137 × 50 cm，149 kg）；另有資料為 54.8 × 136.2 × 48.9 cm。位置為設計建議：離牆 0.30 m、離器材架 0.15 m" },
+    { "id": "rack_1", "name": "器材架 1（近窗）", "facing": "+x", "x": 0, "y": 2.29, "z": 0, "w": 0.50, "d": 0.60, "h": 0.88, "color": "#2B2B2B", "material": "黑色層板配不鏽鋼柱及釘腳，三層", "contents": "上：Audio Space Reference Two 膽前級（外露真空管）；中：Esoteric Grandioso D1X（右聲道）；下：Esoteric G-0Rb 銣原子鐘", "confirmed": false, "note": "器材分配為建議；位置隨聆聽中軸" },
+    { "id": "rack_2", "name": "器材架 2（近飯廳）", "facing": "+x", "x": 0, "y": 2.89, "z": 0, "w": 0.50, "d": 0.60, "h": 0.88, "color": "#2B2B2B", "material": "同器材架 1", "contents": "上：Audio Research Reference 150 膽後級；中：Esoteric Grandioso D1X（左聲道）；下：Esoteric P-0 CD 轉盤", "confirmed": false, "note": "Ref 150 放頂層以利散熱（機高約 22 cm，頂層層板約 0.655 m，合共約 0.88 m）" },
+    { "id": "speaker_left", "name": "JBL K2 S9500（左，近飯廳）", "model": "S9500", "facing": "+x", "x": 0.30, "y": 3.64, "z": 0, "w": 0.50, "d": 0.59, "h": 1.37, "color": "#111111", "material": "同右喇叭", "confirmed": false, "note": "同右喇叭" },
+    { "id": "screen", "name": "投影幕（現有，約 76 吋，按相片估算）", "facing": "+x", "x": 0.06, "y": 2.05, "z": 1.00, "w": 0.01, "d": 1.68, "h": 0.945, "casing_z": 2.00, "color": "#FAFAFA", "confirmed": false, "note": "畫面尺寸、幕底及幕盒高度均按相片比例估算，須量度" },
+
+    { "id": "aquarium_cabinet", "name": "魚缸櫃（向飯廳移）", "facing": "+x", "x": 0, "y": 4.53, "z": 0, "w": 0.47, "d": 1.21, "h": 0.75, "color": "#5F6670", "material": "灰色高光三門櫃", "confirmed": false, "note": "尺寸已確認；位置為建議（離左喇叭 0.30 m）" },
+    { "id": "aquarium_tank", "name": "魚缸", "facing": "+x", "x": 0, "y": 4.53, "z": 0.75, "w": 0.47, "d": 1.21, "h": 0.56, "color": "#7CC3B4", "material": "超白無框玻璃，水草造景", "confirmed": false },
+    { "id": "long_cabinet", "name": "長櫃（深色木摺枱，向飯廳移）", "x": 0, "y": 5.95, "z": 0, "w": 0.63, "d": 1.58, "h": 0.94, "color": "#3E2C22", "material": "深啡色實木摺枱，連抽屜", "confirmed": false, "note": "尺寸已確認；位置為建議" },
+    { "id": "wine_cabinet", "name": "酒櫃（靠右牆）", "facing": "-x", "x": 3.04, "y": 4.30, "z": 0, "w": 0.46, "d": 0.48, "h": 1.28, "color": "#141414", "material": "黑色，玻璃門", "confirmed": false, "note": "尺寸已確認；按相片位於梳化旁，位置須核對" },
+    { "id": "dining_table", "name": "餐枱", "x": 1.89, "y": 6.00, "z": 0, "w": 0.91, "d": 1.82, "h": 0.75, "color": "#4A4A50", "material": "深灰色雲石紋枱布", "confirmed": false, "note": "沿用第三版位置，須與現況核對" },
+    { "id": "chair_l1", "name": "餐椅", "x": 1.39, "y": 6.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false },
+    { "id": "chair_l2", "name": "餐椅", "x": 1.39, "y": 7.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false },
+    { "id": "chair_r1", "name": "餐椅", "x": 2.85, "y": 6.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false },
+    { "id": "chair_r2", "name": "餐椅", "x": 2.85, "y": 7.20, "z": 0, "w": 0.45, "d": 0.45, "h": 0.87, "color": "#1E1E1E", "confirmed": false }
+  ],
+  "lights": [
+    { "name": "方形 LED 吊燈（兩個上下疊）", "x": 1.75, "y": 1.8, "z": 2.2, "size": 0.9, "note": "位置按相片估算" }
+  ],
+  "cameras": [
+    { "name": "立體鳥瞰", "position": [6.6, 4.6, 7.6], "target": [1.2, 0.6, 3.1], "space": "threejs" },
+    { "name": "坐喺梳化望", "position": [3.15, 1.1, 2.89], "target": [0, 1.0, 2.89], "space": "threejs" },
+    { "name": "近看喇叭", "position": [2.3, 1.5, 5.4], "target": [0.4, 0.75, 2.9], "space": "threejs" },
+    { "name": "由飯廳望", "position": [1.75, 1.65, 8.8], "target": [1.6, 0.9, 3.0], "space": "threejs" },
+    { "name": "俯視", "position": [1.75, 14, 4.62], "target": [1.75, 0, 4.55], "space": "threejs" }
+  ]
+}
